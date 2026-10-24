@@ -1,12 +1,14 @@
 # Pixel 8 Pro radio workaround: GEN1 + DHD idletime=0
 
-Installable, open-source packaging of the two local adjustments used on one Pixel 8 Pro. **Experimental mitigation, not an official or permanent Wi-Fi/Bluetooth repair.** Earlier use of these settings still had an overnight recurrence. A hardware fault remains possible.
+Wi-Fi works after a reboot, then disappears again. Bluetooth sometimes joins the disappearing act. If that sounds familiar, this project shares the two adjustments used on one Pixel 8 Pro, with installable modules, source code and a way to check the result.
 
-The underlying boot logic/settings were verified on that phone. The new public ZIP installer, freshly built helper and verification script have PC-side checks only; **these release archives have not been installed or tested on a second phone, or on the publishing owner's phone**. There is no claim of overnight stability. Do not root a supported GrapheneOS installation just to try this.
+**This is an experiment, not a confirmed permanent repair.** An earlier setup with these settings still had an overnight failure, and a hardware fault remains possible. The original boot logic and settings were checked on that phone. **The new public ZIPs, rebuilt helper and verification script have only been checked on a PC; they have not been installed on any phone.** Version 1.3 has no overnight stability result.
+
+Start with the compatibility table below. This release is deliberately picky: matching the model alone is not enough. Please do not root a supported GrapheneOS installation just to try it.
 
 ## 1. Check whether this release applies
 
-Every row must match. The installer refuses other combinations; the boot services keep their own checks.
+Every row must match. The installer checks these details and stops if they do not match; the boot scripts check again when they run.
 
 | Requirement | This release |
 |---|---|
@@ -18,7 +20,7 @@ Every row must match. The installer refuses other combinations; the boot service
 | SELinux | Enforcing |
 | DHD driver SHA-256 | `66b141c29ddfdbf1c42828044d3b36f099c0c564f979c2090f7056fa8c9846d5` |
 
-Read the build in Settings > About phone. To check the remaining technical identifiers, an owner with an already authorized root shell can run these read-only commands:
+Find the build in **Settings > About phone**. If you already have an authorized root shell, these commands read the remaining details without changing anything:
 
 ```sh
 getprop ro.product.device
@@ -29,29 +31,29 @@ getenforce
 sha256sum /vendor/lib/modules/bcmdhd4398.ko
 ```
 
-The kernel suffix `android14` is not the userspace Android version. This package does not apply to every Android 17 Pixel, stock Google firmware, other GrapheneOS builds, other models or other root frameworks. **Do not downgrade, edit the checks or disable SELinux to make an unsupported phone pass.** A future build needs a new driver review, not just a new date in a list.
+That `android14` in the kernel name is confusing, but it does not tell you which Android version is running. Use the exact build and kernel above. Other builds, stock Google firmware, other models and other root frameworks are outside this release. **If a check fails, stop. Do not downgrade, edit the checks or disable SELinux to get past it.** A new build needs its driver reviewed before it can be supported.
 
 ## 2. Download both module ZIPs
 
-Open [release v1.3-public1](https://github.com/Gabig0l/husky-radio-workaround/releases/tag/v1.3-public1) and download:
+Open [release v1.3-public1](https://github.com/Gabig0l/husky-radio-workaround/releases/tag/v1.3-public1), or use these versioned downloads:
 
-- `husky-pcie-gen1-1.3-public1.zip`
-- `husky-dhd-idle0-1.3-public1.zip`
-- `SHA256SUMS.txt` to check the downloaded files.
+- [PCIe GEN1 module](https://github.com/Gabig0l/husky-radio-workaround/raw/refs/tags/v1.3-public1/downloads/husky-pcie-gen1-1.3-public1.zip): `husky-pcie-gen1-1.3-public1.zip`
+- [DHD idletime=0 module](https://github.com/Gabig0l/husky-radio-workaround/raw/refs/tags/v1.3-public1/downloads/husky-dhd-idle0-1.3-public1.zip): `husky-dhd-idle0-1.3-public1.zip`
+- [SHA256SUMS.txt](https://github.com/Gabig0l/husky-radio-workaround/raw/refs/tags/v1.3-public1/downloads/SHA256SUMS.txt) to check the downloaded files.
 
-The automatically generated GitHub **Source code** archive is for inspection/building; it is not a Magisk installer. Do not install a documentation ZIP or the source archive as a module.
+You need **both module ZIPs**. GitHub also offers a **Source code** archive for reading or building the project. That one does not install in Magisk, despite looking equally ZIP-shaped.
 
-On a PC, compare each downloaded ZIP's SHA-256 with `SHA256SUMS.txt` using `sha256sum`, or PowerShell `Get-FileHash -Algorithm SHA256`. These hashes detect file mismatch; trust in the download still depends on obtaining it from the intended release.
+On a PC, check each ZIP against `SHA256SUMS.txt` using `sha256sum`, or PowerShell `Get-FileHash -Algorithm SHA256`. Each result must match the line for that file. Get the files and checksum list from this repository's release; a checksum only helps if you trust the list you compare against.
 
 ## 3. Install on an already rooted, matching phone
 
-1. Keep a copy of your existing module versions if you already use them. The module IDs below are the same as the original local experiment; installing this release updates those modules rather than adding duplicates.
+1. If you already use these modules, keep a copy of your current versions. This release uses the original module IDs, so it updates them in place.
 2. In the Magisk app, open **Modules > Install from storage** and choose `husky-pcie-gen1-1.3-public1.zip`.
 3. If its checks pass, install `husky-dhd-idle0-1.3-public1.zip` the same way. **Install both before rebooting.** If either install fails, disable the other newly installed module before rebooting and stop. Do not bypass the error.
 4. If Wi-Fi can be enabled normally, leave it enabled before reboot. Reboot normally once after both installs. The PCIe target is set early; the DHD service has a fixed 120-second readiness window and only calls the helper while wlan0 is up. It does not turn Wi-Fi on for you.
-5. If Wi-Fi cannot start or the driver does not answer healthy GETs during that window, this release will not force it. Read the result rather than repeatedly running the service. A dead PCIe link/driver may need repair outside the scope of these adjustments.
+5. If Wi-Fi cannot start, or the driver does not respond to the initial read checks in that window, stop and read the result. Repeatedly running the service will not repair a dead PCIe link or driver.
 
-The installer validates identity and stages module files; it does not change the live radio state. These packages do not flash boot images, replace firmware/drivers, alter SELinux policies, install app hooks or hide root.
+Installation checks the phone and copies the module files. The radio adjustments happen on the next boot. The packages do not flash boot images, replace firmware or drivers, change SELinux policies, install app hooks or hide root.
 
 ## 4. Verify the settings and then test normal use
 
@@ -67,7 +69,7 @@ For an already authorized ADB connection, the equivalent is:
 adb shell su -c '/system/bin/sh /data/adb/modules/wifi_dhd_idle0/verify.sh'
 ```
 
-The verifier does not write DHD settings or reset radios. It checks compatibility/hashes, the GEN1 target, actual negotiated speed and one bounded native DHD GET. Expected output includes:
+This check only reads: it does not change DHD settings or reset the radios. It checks compatibility, file hashes, the GEN1 target, the actual link speed and one DHD read. A successful result includes:
 
 ```text
 pcie_target=GEN1
@@ -79,9 +81,9 @@ mode=inspect mutation=none
 PASS: GEN1 target and healthy DHD GET reporting idletime=0. This is not a stability test.
 ```
 
-An `UNCONFIRMED` timeout is not success. A kernel ioctl stuck in uninterruptible sleep may survive a kill request. Do not repeat helper writes or delete the once-per-boot claim to force retries. If idletime is nonzero after a successful earlier application, the bus may have been reinitialised; this service deliberately does not enforce it continuously.
+`UNCONFIRMED` means the check could not confirm the state. Treat it as a stop sign. A driver call stuck inside the kernel can outlive a request to kill its process. Do not repeat helper writes or delete the once-per-boot claim to force another attempt. If idletime later returns to a nonzero value, the bus may have restarted; the service applies the setting once per boot, rather than continually forcing it.
 
-Then test the actual use you care about: Wi-Fi browsing/transfer, screen-off idle, Bluetooth accessory connection and its real function, including watch synchronisation if relevant. Record the duration and any recurrence. A PASS from the verifier means settings were read back, not that connectivity or long-term stability was proved.
+Next, try the things you actually use: browsing, file transfers, leaving the screen off, and connecting a Bluetooth accessory **and using it**. For a watch, that includes a real sync. Keep a note of how long it works and whether the fault returns. A verifier PASS confirms the settings were read back. Your usual use is the next test; the PASS alone cannot tell you the problem is solved.
 
 Useful local records, if a maintainer needs them:
 
@@ -89,7 +91,7 @@ Useful local records, if a maintainer needs them:
 - `/data/adb/wifi_dhd_idle0/boot-<current-boot-id>/outcome.txt`
 - The neighbouring `service.log`, `inspect-*.log` and `set.log`.
 
-Keep these private initially. Redact boot IDs and any other identifiers before sharing. No telemetry or network upload is part of these modules.
+Keep these records private until you have removed boot IDs and other personal identifiers. The modules do not upload anything or collect telemetry.
 
 ## 5. Undo
 
@@ -98,7 +100,7 @@ In Magisk **Modules**, disable **both**:
 - `codex_wifi_gen1_husky` (PCIe Gen1)
 - `wifi_dhd_idle0` (DHD idletime zero)
 
-Reboot normally, then verify the resulting PCIe/DHD state. Disabling does not undo a setting in the already running boot; this is why a reboot is part of rollback. Do not guess a live reversal value or flash somebody else's boot image. You can then remove the disabled modules in Magisk if desired. This restores neither an unmodified OS nor the original security assumptions of GrapheneOS.
+Reboot normally, then check the resulting PCIe/DHD state. The reboot matters: disabling a module does not undo a setting already applied during the current boot. After that, you can remove the disabled modules in Magisk. Do not guess a live reversal value or flash somebody else's boot image. Removing these modules does not remove root or restore an unmodified GrapheneOS installation.
 
 If Android cannot boot after installing a module, use the recovery procedure appropriate to your already rooted installation. Do not unlock/relock or factory-reset on the basis of this README: those operations can erase data. Have a working module-disable/recovery path before installing experimental boot modules.
 
@@ -125,4 +127,4 @@ See `BUILD-MANIFEST.json`, `VALIDATION.md` and `tests/`. PC-side tests cover ref
 
 [Magisk's module guide](https://topjohnwu.github.io/Magisk/guides.html) explains installation and module boot stages. The [DHD ABI header](https://android.googlesource.com/kernel/google-modules/wlan/bcmdhd/bcm4398/+/85d6c7b2eb4e81fffb3cb349db06c885bfc0005b/include/dhdioctl.h) and [PCIe source baseline](https://android.googlesource.com/kernel/google-modules/wlan/bcmdhd/bcm4398/+/85d6c7b2eb4e81fffb3cb349db06c885bfc0005b/dhd_pcie.c) explain the protocol/mechanism; that baseline is not claimed to match every instruction in the shipped driver.
 
-Prepared with AI assistance from local records and source. This repository is independent of Google and GrapheneOS. Respect each community's rules on AI-authored content when sharing.
+This is an independent community project, with no affiliation to Google or GrapheneOS.

@@ -1,6 +1,6 @@
 # Pixel 8 Pro Wi-Fi/Bluetooth dropouts: experimental PCIe GEN1 and DHD idletime=0 mitigation
 
-Technical case report, 24 October 2026. One device; no official Google or GrapheneOS fix is claimed. Prepared with AI assistance from local diagnostic records, with technical details checked against those records.
+Case notes, 24 October 2026. This is what was tried on one Pixel 8 Pro, what the records confirm, and what remains unanswered. It is an independent experiment, with no official Google or GrapheneOS fix claimed. For downloads and step-by-step instructions, start with [the guide](../README.md).
 
 ## What this case establishes
 
