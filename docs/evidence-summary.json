@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "preparedDate": "2026-10-24",
+  "scope": "Selected and paraphrased technical observations from one device; not raw logs or independent replication",
+  "device": "Pixel 8 Pro (husky)",
+  "modifiedInstallation": true,
+  "magisk": "31.0",
+  "selinux": "Enforcing",
+  "androidVersionEvidence": {
+    "corroboration": "https://grapheneos.org/releases#2026061800",
+    "historicalBuild": "2026100201",
+    "sdk": 37,
+    "currentReleaseSdkPairCaptured": false,
+    "release": "17"
+  },
+  "current": {
+    "wifiAssociated": true,
+    "kernel": "6.1.177-android14-11-gce3dfc2513b1",
+    "bluetooth": [
+      "State:         ON",
+      "Bluetooth crashed 0 times",
+      "ConnectionState: STATE_CONNECTED"
+    ],
+    "localRadioVersion": "1.3-local-20261023",
+    "build": "2026102101",
+    "pcieTargetGen1": true,
+    "dhdIdletimeZero": true,
+    "evidenceDate": "2026-10-24",
+    "wifiEnabled": true,
+    "limitations": [
+      "Boot-state sample only",
+      "No effective accessory/watch synchronisation test",
+      "No prolonged or overnight validation of 1.3"
+    ]
+  },
+  "previous": {
+    "absenceOfSearchedFaultsOnlyWithinWindow": true,
+    "negotiatedWidth": 1,
+    "wifiPingWlan0": {
+      "packetLossPercent": 0,
+      "sent": 3,
+      "received": 3
+    },
+    "negotiatedSpeed": "2.5 GT/s PCIe",
+    "searchedKernelFaultWindowSeconds": [
+      0,
+      132
+    ],
+    "pcieTargetGen1": true,
+    "build": "2026101601",
+    "dhdIdletimeZero": true,
+    "evidenceDate": "2026-10-20"
+  },
+  "driverReview": {
+    "liveIdletime": 0,
+    "dhdSha256": "66b141c29ddfdbf1c42828044d3b36f099c0c564f979c2090f7056fa8c9846d5",
+    "dhdNativeAbiChecks": 7,
+    "liveDriverMatchesAuthenticatedOta": true,
+    "pcieSha256": "62f4b54113c2ad10b6977f316d7cd43d94532414630fec8cb1694ae9ed37dc89",
+    "liveIoctlVersion": 1,
+    "idletimeEntry": {
+      "type": "INT32",
+      "typeNumber": 6,
+      "varid": 27,
+      "strideBytes": 16
+    },
+    "build": "2026102101",
+    "changedCodeTriggeredFocusedReview": true,
+    "liveNativeMagic": "0x00444944",
+    "broadCodeIdentityComparisonPassed": false
+  },
+  "earlierFailureEvidence": {
+    "causeProven": false,
+    "system": "Official Google Pixel OS, Android 16",
+    "date": "2026-10-05",
+    "sequence": [
+      "PCIe resume/link training failure",
+      "PCIE_RC_LINK_UP_FAIL",
+      "Wi-Fi Big Hammer recovery request",
+      "Bluetooth BT_COEX_THREAD abort / vendor error 127"
+    ],
+    "rootPresent": false,
+    "bootloader": "locked",
+    "verifiedBoot": "green"
+  },
+  "overnightRecurrence": {
+    "date": "2026-10-08",
+    "laterBootHadGen1AndIdletimeZero": true,
+    "report": "Owner reported Wi-Fi failed overnight with an earlier GEN1/idletime-zero configuration",
+    "faultTimeIdletimeCaptured": false,
+    "causeCaptured": false
+  },
+  "excludedClaims": [
+    "Definitive fix",
+    "Android 17 causation",
+    "GrapheneOS-only cause",
+    "Direct Bluetooth-stack repair",
+    "Hardware component identified",
+    "Universal compatibility",
+    "Recovery software tests prove radio efficacy"
+  ]
+}

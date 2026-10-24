@@ -1,0 +1,16 @@
+{
+  "version": "1.3-public1",
+  "device": "husky",
+  "build": "2026102101",
+  "kernel": "6.1.177-android14-11-gce3dfc2513b1",
+  "dhdDriverSha256": "66b141c29ddfdbf1c42828044d3b36f099c0c564f979c2090f7056fa8c9846d5",
+  "compiler": "Zig 0.17.0",
+  "target": "aarch64-linux-musl",
+  "stripped": true,
+  "sourceSha256": "aad2c3aaf2f08bd8cfeae64975530da53309de71be1ab76d3d2b280121b302d2",
+  "helperSha256": "ae8f165e50eb29e6192211281bd04319132895c7026d78b8e46902782be90f0f",
+  "helperBytes": 33768,
+  "arm64HelperExecutedOnPublishingPC": false,
+  "newPackagesTestedOnPhone": false,
+  "basis": "Packaging of the locally verified 1.3 boot logic; source/helper implementation retained"
+}

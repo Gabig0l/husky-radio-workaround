@@ -1,0 +1,6 @@
+id=codex_wifi_gen1_husky
+name=Pixel 8 Pro - Wi-Fi PCIe Gen1 (experimental)
+version=1.3-public1
+versionCode=5
+author=Husky radio workaround contributors
+description=Experimental GEN1 mitigation for husky 2026102101 / gce3dfc2513b1 only. Not a permanent radio repair. Install together with the matching DHD module.
